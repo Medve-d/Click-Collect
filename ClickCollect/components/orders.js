@@ -1,86 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import supabase from '../supabase'; // Assurez-vous d'importer le fichier de configuration
+import { View, Text, StyleSheet } from 'react-native';
+import supabase from '../supabase'; 
 
-const PizzaOrder = () => {
-  const [pizzas, setPizzas] = useState([]);
-  const [selectedPizza, setSelectedPizza] = useState('');
-  const [quantity, setQuantity] = useState('1');
-  const [customerName, setCustomerName] = useState('');
+const OrderList = () => {
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const fetchPizzas = async () => {
+    const fetchOrders = async () => {
       try {
         const { data, error } = await supabase
-          .from('pizzas')
-          .select('*');
+          .from('orders')
+          .select('pizza_id, name ')
 
         if (error) {
-          console.error('Error fetching pizzas', error);
+          console.error('Erreur lors de la récupération des commandes:', error);
         } else {
-          setPizzas(data);
-          if (data.length > 0) {
-            setSelectedPizza(data[0].id.toString());
-          }
+          setOrders(data);
         }
       } catch (error) {
-        console.error('Unexpected error fetching pizzas', error);
+        console.error('Erreur inattendue lors de la récupération des commandes:', error);
       }
     };
 
-    fetchPizzas();
+    fetchOrders();
   }, []);
-
-  const handleOrder = async () => {
-    try {
-      const { error } = await supabase
-        .from('orders')
-        .insert({ pizza_id: selectedPizza, customer_name: customerName, quantity });
-
-      if (error) {
-        console.error('Error placing order', error);
-        Alert.alert('Erreur', 'Impossible de passer la commande.');
-      } else {
-        Alert.alert(`Commande passée par ${customerName} : ${quantity} pizza(s) ${selectedPizza}`);
-      }
-    } catch (error) {
-      console.error('Unexpected error placing order', error);
-      Alert.alert('Erreur', 'Une erreur inattendue s\'est produite.');
-    }
-  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Commander une Pizza</Text>
-      
-      <Text style={styles.label}>Nom du client</Text>
-      <TextInput
-        style={styles.input}
-        value={customerName}
-        onChangeText={setCustomerName}
-      />
-
-      <Text style={styles.label}>Sélectionner une pizza</Text>
-      <Picker
-        selectedValue={selectedPizza}
-        onValueChange={(itemValue) => setSelectedPizza(itemValue)}
-        style={styles.picker}
-      >
-        {pizzas.map((pizza) => (
-          <Picker.Item key={pizza.id} label={pizza.name} value={pizza.id.toString()} />
-        ))}
-      </Picker>
-
-      <Text style={styles.label}>Quantité</Text>
-      <TextInput
-        style={styles.input}
-        value={quantity}
-        onChangeText={setQuantity}
-        keyboardType="numeric"
-      />
-
-      <Button title="Passer la commande" onPress={handleOrder} />
+      <Text style={styles.title}>Liste des Commandes</Text>
+      {orders.map((order) => (
+        <View key={order.id} style={styles.orderItem}>
+          <Text>Nom de la Pizza : {order.name}</Text>
+          <Text>ID de la Pizza : {order.pizza_id}</Text>
+        </View>
+      ))}
     </View>
   );
 };
@@ -97,22 +50,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  label: {
-    fontSize: 18,
+  orderItem: {
     marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
+    padding: 10,
     borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-    marginBottom: 20,
+    borderColor: '#ccc',
   },
 });
 
-export default PizzaOrder;
+export default OrderList;
