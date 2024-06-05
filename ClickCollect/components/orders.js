@@ -10,7 +10,7 @@ const OrderList = () => {
       try {
         const { data, error } = await supabase
           .from('orders')
-          .select('pizza_id, name ')
+          .select('pizza_id,name')
 
         if (error) {
           console.error('Erreur lors de la récupération des commandes:', error);
@@ -29,9 +29,8 @@ const OrderList = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Liste des Commandes</Text>
       {orders.map((order) => (
-        <View key={order.id} style={styles.orderItem}>
+        <View key={order.pizza_id} style={styles.orderItem}>
           <Text>Nom de la Pizza : {order.name}</Text>
-          <Text>ID de la Pizza : {order.pizza_id}</Text>
         </View>
       ))}
     </View>
