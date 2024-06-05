@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, Picker, TextInput, StyleSheet, Alert } from 'react-native';
-import supabase from '../supabase'; // Assurez-vous d'importer le fichier de configuration
+import supabase from '../supabase';
 
 const PizzaOrder = () => {
   const [pizzas, setPizzas] = useState([]);
