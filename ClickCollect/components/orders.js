@@ -10,11 +10,12 @@ const OrderList = () => {
       try {
         const { data, error } = await supabase
           .from('orders')
-          .select('pizza_id,name')
+          .select('*');
 
         if (error) {
           console.error('Erreur lors de la récupération des commandes:', error);
         } else {
+          console.log('Orders récupérées:', data); // Ajout du console.log pour afficher les orders récupérées
           setOrders(data);
         }
       } catch (error) {
@@ -28,11 +29,13 @@ const OrderList = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Liste des Commandes</Text>
-      {orders.map((order) => (
-        <View key={order.pizza_id} style={styles.orderItem}>
-          <Text>Nom de la Pizza : {order.name}</Text>
-        </View>
-      ))}
+      
+      <View>
+  {orders.map(order => (
+    <Text key={order.id}>{order.name}</Text>
+  ))}
+</View>
+
     </View>
   );
 };
@@ -48,12 +51,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-  },
-  orderItem: {
-    marginBottom: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
   },
 });
 
