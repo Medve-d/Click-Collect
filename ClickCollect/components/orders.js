@@ -31,11 +31,12 @@ const OrderList = () => {
       <Text style={styles.title}>Liste des Commandes</Text>
       
       <View>
-  {orders.map(order => (
-    <Text key={order.id}>{order.name}</Text>
-  ))}
-</View>
-
+        {orders.map(order => (
+          <Text key={order.id}>
+            {`Name: ${order.name}`}
+          </Text>
+        ))}
+      </View>
     </View>
   );
 };
