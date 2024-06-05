@@ -32,8 +32,22 @@ const PizzaOrder = () => {
     fetchPizzas();
   }, []);
 
-  const handleOrder = () => {
-    Alert.alert(`Commande passée par ${customerName} : ${quantity} pizza(s) ${selectedPizza}`);
+  const handleOrder = async () => {
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .insert({ pizza_id: selectedPizza, customer_name: customerName, quantity });
+
+      if (error) {
+        console.error('Error placing order', error);
+        Alert.alert('Erreur', 'Impossible de passer la commande.');
+      } else {
+        Alert.alert(`Commande passée par ${customerName} : ${quantity} pizza(s) ${selectedPizza}`);
+      }
+    } catch (error) {
+      console.error('Unexpected error placing order', error);
+      Alert.alert('Erreur', 'Une erreur inattendue s\'est produite.');
+    }
   };
 
   return (
