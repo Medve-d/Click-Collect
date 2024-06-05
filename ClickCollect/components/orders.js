@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Picker, TextInput, StyleSheet, Alert } from 'react-native';
-import supabase from '../supabase';
+import { View, Text, Button, TextInput, StyleSheet, Alert } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import supabase from '../supabase'; // Assurez-vous d'importer le fichier de configuration
 
 const PizzaOrder = () => {
   const [pizzas, setPizzas] = useState([]);
