@@ -15,7 +15,7 @@ const OrderList = () => {
         if (error) {
           console.error('Erreur lors de la récupération des commandes:', error);
         } else {
-          console.log('Orders récupérées:', data); // Ajout du console.log pour afficher les orders récupérées
+          console.log('Orders récupérées:', data);
           setOrders(data);
         }
       } catch (error) {
